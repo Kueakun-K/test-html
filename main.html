@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        var book = []
+        var data = []
+        var name1 = []
+        function getget(){
+            axios.get("https://backend-sdp.herokuapp.com/api/book").then(
+                (res) =>{                
+                book = res.data
+                console.log(book.length)
+                name1 = book[0].book_name
+                console.log(name1)
+                document.getElementById("response").innerHTML = "<br><br> Book Name : "+ book[0].book_name  +
+                                                                "<br> Book Tag : "+ book[0].book_tag +
+                                                                "<br> Book description : "+ book[0].book_description +
+                                                                "<br> Book price : "+book[0].book_price +"<br>"
+                }
+            )
+        }
+        function edit(){
+            // console.log(name1)
+            axios.get(`https://backend-sdp.herokuapp.com/api/bookname?name=${name1}`).then(
+                (res) =>{                
+                data = res.data
+                console.log(data)
+                document.getElementById("bookname").value = data.book_name
+                document.getElementById("booktag").value = data.book_tag
+                document.getElementById("bookdes").value = data.book_description
+                document.getElementById("bookprice").value = data.book_price
+                }
+            )
+        }
+        function save(){
+            var q1 = document.forms[0]
+            var bookname = q1.elements[0].value
+            var booktag = q1.elements[1].value
+            var bookdes = q1.elements[2].value
+            var bookprice = q1.elements[3].value
+
+            axios.put(`https://backend-sdp.herokuapp.com/api/book?name=${name1}`,{
+                book_name: bookname,
+                book_tag: booktag,
+                book_description: bookdes,
+                book_price: bookprice,
+            }).then((res) => getget())
+        }
+    </script>
+</head>
+
+    <h1>สวัสดีจ้า</h1>
+    <button onclick="getget()">GET</button>
+    <span id="response"></span>
+    <br/>
+    <button onclick="edit()">EDIT</button>
+    <form>
+        <label>Book Name : </label>
+        <input type="text" id="bookname"><br/><br/>
+        <label>Book Tag :  : </label>
+        <input type="text" id="booktag"><br/><br/>
+        <label>Book description : </label>
+        <input type="text" id="bookdes"><br/><br/>
+        <label>Book price : </label>
+        <input type="text" id="bookprice"><br/><br/>
+    </form>
+    <button onclick="save()">SAVE</button>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function register(){
+            var q1 = document.forms[0]
+            var userEmail = q1.elements[0].value
+            var userName = q1.elements[1].value
+            var userPassword = q1.elements[2].value
+            var passwordRepeat = q1.elements[3].value
+
+            axios.post("https://backend-sdp.herokuapp.com/api/user",{
+                user_email: userEmail,
+                user_name: userName,
+                user_password: userPassword,
+                passwordRepeat: passwordRepeat,
+            }).then((res)=>{
+                console.log(res.data)
+
+                if(res.data == "OK"){
+                    window.location = "/main.html"
+                }
+                else{
+                    document.getElementById("response").innerHTML = res.data
+                }
+            })
+        }
+    </script>
+    <title>web test</title>
+</head>
+<body>
+    <h1>Register</h1>
+    <form >
+        <label>Email</label>
+        <input type="email" id="userName">
+        <br/><br/>
+        <label>Username</label>
+        <input type="text" id="userLastname">
+        <br/><br/>
+        <label>Password</label>
+        <input type="password" id="userEmail">
+        <br/><br/>
+        <label>Re Password</label>
+        <input type="password" id="userPassword">
+        <br/><br/>
+    </form>
+    <span id="response"></span>
+    <br/><br/>
+    <button onclick="register()">Register</button>
+</body>
+</html>

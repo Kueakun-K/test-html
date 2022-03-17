@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function login(){
+            var q1 = document.forms[0]
+            var userName = q1.elements[0].value
+            var userPassword = q1.elements[1].value
+
+            console.log(userName,userPassword)
+
+            axios.post("https://backend-sdp.herokuapp.com/api/login", {
+                user_name: userName,
+                user_password: userPassword,
+            }).then((res) =>{
+                console.log(res)
+                if(res.data == "OK"){
+                    window.location = "/main.html"
+                }
+                else{
+                    document.getElementById("response").innerHTML = res.data
+                }
+            })
+        }
+    </script>
+    <title>web test</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form >
+        <label>Username</label>
+        <input type="text" id="userName"><br/><br/>
+        <label>Password</label>
+        <input type="password" id="userPassword">
+        <br/><br/>
+    </form>
+    <span id="response"></span>
+    <br/><br/>
+    <button onclick="login()">Login</button>
+</body>
+</html>
