@@ -8,7 +8,6 @@
     <script>
         var book = []
         var data = []
-        var name1 = []
         function getget(){
             axios.get("https://backend-sdp.herokuapp.com/api/book").then(
                 (res) =>{                
@@ -17,13 +16,23 @@
                 console.log(book)
 
                 document.getElementById("response").innerHTML = book.map(book => 
-                "<br><br> Book Name : "+ book.book_name  +
+                "<br> Book Name : "+ book.book_name  +
                 "<br> Book Tag : "+ book.book_tag +
                 "<br> Book description : "+ book.book_description +
                 "<br> Book price : "+book.book_price +
-                "<br>"+`<button onclick="edit('${book._id}')">EDIT</button>`+"<br>"
-                
+                "<br>"+`<button onclick="edit('${book._id}')">EDIT</button><button onclick="getcomment('${book._id}')">COMMENT</button>`+"<br>" 
                 )}
+            )
+        }
+
+        function getcomment(id){
+            axios.get(`https://backend-sdp.herokuapp.com/api/comment?id=${id}`).then(
+                (res) => {
+                    comment = res.data
+                    document.getElementById("comment").innerHTML = comment.map(comment =>
+                    "Comment : " + comment.comment + "<br><br>"
+                    )
+                }
             )
         }
 
@@ -61,8 +70,11 @@
 <body onload="getget()">
 
     <h1>สวัสดีจ้า</h1>
+    <h3>BOOK</h3>
     <span id="response"></span>
     <br/>
+    <H3>COMMENT</H3>
+    <span id="comment"></span>
     <H3>UPDATE</H3>
     <form>
         <label>ID : </label>
@@ -77,5 +89,6 @@
         <input type="text" id="bookprice"><br/><br/>
     </form>
     <button onclick="save()">SAVE</button>
+    
 </body>
 </html>
