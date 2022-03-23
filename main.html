@@ -14,21 +14,26 @@
                 (res) =>{                
                 book = res.data
                 console.log(book.length)
-                name1 = book[0].book_name
-                console.log(name1)
-                document.getElementById("response").innerHTML = "<br><br> Book Name : "+ book[0].book_name  +
-                                                                "<br> Book Tag : "+ book[0].book_tag +
-                                                                "<br> Book description : "+ book[0].book_description +
-                                                                "<br> Book price : "+book[0].book_price +"<br>"
-                }
+                console.log(book)
+
+                document.getElementById("response").innerHTML = book.map(book => 
+                "<br><br> Book Name : "+ book.book_name  +
+                "<br> Book Tag : "+ book.book_tag +
+                "<br> Book description : "+ book.book_description +
+                "<br> Book price : "+book.book_price +
+                "<br>"+`<button onclick="edit('${book._id}')">EDIT</button>`+"<br>"
+                
+                )}
             )
         }
-        function edit(){
-            // console.log(name1)
-            axios.get(`https://backend-sdp.herokuapp.com/api/bookname?name=${name1}`).then(
+
+        function edit(id){
+            console.log(id)
+            axios.get(`https://backend-sdp.herokuapp.com/api/bookid?id=${id}`).then(
                 (res) =>{                
                 data = res.data
                 console.log(data)
+                document.getElementById("bookid").value = data._id
                 document.getElementById("bookname").value = data.book_name
                 document.getElementById("booktag").value = data.book_tag
                 document.getElementById("bookdes").value = data.book_description
@@ -38,12 +43,13 @@
         }
         function save(){
             var q1 = document.forms[0]
-            var bookname = q1.elements[0].value
-            var booktag = q1.elements[1].value
-            var bookdes = q1.elements[2].value
-            var bookprice = q1.elements[3].value
+            var bookid = q1.elements[0].value
+            var bookname = q1.elements[1].value
+            var booktag = q1.elements[2].value
+            var bookdes = q1.elements[3].value
+            var bookprice = q1.elements[4].value
 
-            axios.put(`https://backend-sdp.herokuapp.com/api/book?name=${name1}`,{
+            axios.put(`https://backend-sdp.herokuapp.com/api/book?id=${bookid}`,{
                 book_name: bookname,
                 book_tag: booktag,
                 book_description: bookdes,
@@ -52,16 +58,18 @@
         }
     </script>
 </head>
+<body onload="getget()">
 
     <h1>สวัสดีจ้า</h1>
-    <button onclick="getget()">GET</button>
     <span id="response"></span>
     <br/>
-    <button onclick="edit()">EDIT</button>
+    <H3>UPDATE</H3>
     <form>
+        <label>ID : </label>
+        <input type="text" id="bookid" READONLY><br/><br/>
         <label>Book Name : </label>
         <input type="text" id="bookname"><br/><br/>
-        <label>Book Tag :  : </label>
+        <label>Book Tag : </label>
         <input type="text" id="booktag"><br/><br/>
         <label>Book description : </label>
         <input type="text" id="bookdes"><br/><br/>
